@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="PdfSharp" Version="1.51.5185-beta" />
+    <PackageReference Include="PdfSharpCore" Version="1.2.16" />
   </ItemGroup>
 
 </Project>
