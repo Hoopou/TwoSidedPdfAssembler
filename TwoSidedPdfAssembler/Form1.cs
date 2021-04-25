@@ -228,6 +228,16 @@ namespace TwoSidedPdfAssembler
                 }
                 if(selectedPanels.Count>0)
                 panel_preview.BackgroundImage = selectedPanels[selectedPanels.Count-1].BackgroundImage;
+            }else if (Control.ModifierKeys == Keys.Control)
+            {
+                if (selectedPanels.Contains((Panel)sender))
+                {
+                    selectedPanels.Remove((Panel)sender);
+                }
+                else
+                {
+                    selectedPanels.Add((Panel)sender);
+                }
             }
             else
             {
@@ -282,6 +292,13 @@ namespace TwoSidedPdfAssembler
 
         private void button_export_pdf_Click(object sender, EventArgs e)
         {
+            var fileName = ChooseOutputFileName();
+            if (fileName == null) return;
+            if (!fileName.ToLower().EndsWith(".pdf"))
+            {
+                fileName = fileName + ".pdf";
+            }
+
             PdfDocument finalPDF = new PdfDocument();
             foreach(var panel in flowPanelLayout_pages.Controls)
             {
@@ -300,7 +317,7 @@ namespace TwoSidedPdfAssembler
                 
             }
 
-            finalPDF.Save(@"C:\Users\vince\Documents\Programmation\Scannerapplication\scan\finalpdf.pdf");
+            finalPDF.Save(fileName);
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -324,5 +341,77 @@ namespace TwoSidedPdfAssembler
             }
         }
 
+        private void button_export_png_Click(object sender, EventArgs e)
+        {
+            var fileName = ChooseOutputFileName("PNG (*.png)|*.png");
+            if (fileName == null) return;
+            if (fileName.ToLower().EndsWith(".png"))
+            {
+                fileName = fileName.Substring(0, fileName.Length - ".png".Length);
+            }
+
+
+            int count = 1;
+            foreach (var panel in flowPanelLayout_pages.Controls)
+            {
+                ((Panel)panel).BackgroundImage.Save(fileName + String.Format("_{0}.png", count++), ImageFormat.Png);              
+            }
+
+        }
+
+        private void button_export_jpg_Click(object sender, EventArgs e)
+        {
+            var fileName = ChooseOutputFileName("JPG (*.jpg)|*.jpg");
+            if (fileName == null) return;
+            if (fileName.ToLower().EndsWith(".jpg"))
+            {
+                fileName = fileName.Substring(0, fileName.Length - ".jpg".Length);
+            }
+
+
+            int count = 1;
+            foreach (var panel in flowPanelLayout_pages.Controls)
+            {
+                ((Panel)panel).BackgroundImage.Save(fileName + String.Format("_{0}.jpg", count++), ImageFormat.Jpeg);
+            }
+        }
+
+        private string ChooseOutputFileName(string filter = "PDF (*.pdf)|*.pdf")
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = filter;
+
+            // Allow the user to select multiple images.
+            fileDialog.Multiselect = false;
+            fileDialog.Title = "My PDF Browser";
+            fileDialog.CheckFileExists = false;
+
+            DialogResult dr = fileDialog.ShowDialog();
+            if (dr == System.Windows.Forms.DialogResult.OK)
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                return fileDialog.FileName;
+            }
+
+            return null;
+        }
+
+        private void button_crop_Click(object sender, EventArgs e)
+        {
+            foreach (var panel in selectedPanels)
+            {
+                var targetImg = ImageHelper.CropImage(panel.BackgroundImage, Color.White, (int)numericUpDown_tolerance.Value);
+                panel.BackgroundImage = null;
+                panel.BackgroundImage = targetImg;
+                panel.Refresh();
+                panel_preview.BackgroundImage = null;
+                panel_preview.BackgroundImage = targetImg;
+                panel_preview.Refresh();
+            }
+
+            panel_preview.BackgroundImage = null;
+            panel_preview.BackgroundImage = selectedPanels.Count > 0 ? selectedPanels.Last().BackgroundImage : null;
+
+        }
     }
 }

@@ -83,12 +83,16 @@ namespace TwoSidedPdfAssembler
                                 if (xObject != null && xObject.Elements.GetString("/Subtype") == "/Image")
 
                                 {
+                                    try
+                                    {
 
-                                    var currentImg = GetImage(xObject);
+                                        var currentImg = GetImage(xObject);
 
-                                    if (currentImg != null)
-                                        imageList.Add(currentImg);
+                                        if (currentImg != null)
+                                            imageList.Add(currentImg);
 
+                                    }
+                                    catch (Exception) { }
                                 }
 
                             }
@@ -207,6 +211,176 @@ namespace TwoSidedPdfAssembler
 
             return (Image)bmp;
             //bmp.Save(path + @"\" + String.Format("Image{0}.png", count++), System.Drawing.Imaging.ImageFormat.Png);
+        }
+
+        public static Image CropImage(Image sourceImage, Color grey, int tolerance = 80)
+        {
+            //using (var ms = new MemoryStream(ImageToByteArray(sourceImage)))
+            //{
+            //var Img = new Bitmap(sourceImage);
+
+            //using (Bitmap bmp = new Bitmap(Img))
+            //{
+            //    var midX = bmp.Width / 2;
+            //    var midY = bmp.Height / 2;
+            //    var yTop = 0;
+            //    var yBottom = bmp.Height;
+            //    var xLeft = 0;
+            //    var xRight = bmp.Width;
+
+            //    for (int y = 0; y < bmp.Height; y++)
+            //    {
+            //        Color pxl = bmp.GetPixel(midX, y);
+            //        if (pxl != grey)
+            //        {
+            //            yTop = y;
+            //            break;
+            //        }
+            //    }
+
+            //    for (int x = 0; x < bmp.Width; x++)
+            //    {
+            //        Color pxl = bmp.GetPixel(x, midX);
+            //        if (pxl != grey)
+            //        {
+            //            xLeft = x;
+            //            break;
+            //        }
+            //    }
+
+            //    for (int x = bmp.Width - 1; x > midX; x--)
+            //    {
+            //        Color pxl = bmp.GetPixel(x, midX);
+            //        if (pxl != grey)
+            //        {
+            //            xRight = x;
+            //            break;
+            //        }
+            //    }
+
+            //    for (int y = bmp.Height - 1; y > midY; y--)
+            //    {
+            //        Color pxl = bmp.GetPixel(midX, y);
+            //        if (pxl != grey)
+            //        {
+            //            yBottom = y;
+            //            break;
+            //        }
+            //    }
+            //    Image redBmp = bmp.Clone(new Rectangle(xLeft, yTop, xRight - xLeft, yBottom - yTop), System.Drawing.Imaging.PixelFormat.DontCare);
+
+            //    return redBmp;
+
+
+            //}
+
+            var bmp = new Bitmap(sourceImage);
+            int w = bmp.Width;
+            int h = bmp.Height;
+            //int white = 0xffffff;
+            var basecolor = bmp.GetPixel(w - 1, h - 1);
+
+            Func<Color, Color, bool> isSameColorWithTolerance = (c1, c2) =>
+            {
+                var tolelanceColor = Color.FromArgb(0, 0, 0, tolerance);
+                if(Math.Abs(c1.A-c2.A)<= tolerance && Math.Abs(c1.R - c2.R) <= tolerance && Math.Abs(c1.G - c2.G) <= tolerance && Math.Abs(c1.B - c2.B) <= tolerance)
+                    return true;
+                return false;
+            };
+
+            Func<int, bool> allWhiteRow = r =>
+            {
+                for (int i = 0; i < w; ++i)
+                {
+                    if (bmp.GetPixel(i, r) != basecolor && !isSameColorWithTolerance(bmp.GetPixel(i, r), basecolor))
+                        return false;
+                }
+                return true;
+            };
+
+            Func<int, bool> allWhiteColumn = c =>
+            {
+                for (int i = 0; i < h; ++i)
+                    if (bmp.GetPixel(c, i) != basecolor && !isSameColorWithTolerance(bmp.GetPixel(c, i), basecolor))
+                        return false;
+                return true;
+            };
+
+            int topmost = 0;
+            for (int row = 0; row < h; ++row)
+            {
+                if (!allWhiteRow(row))
+                    break;
+                topmost = row;
+            }
+
+            int bottommost = 0;
+            for (int row = h - 1; row >= 0; --row)
+            {
+                if (!allWhiteRow(row))
+                    break;
+                bottommost = row;
+            }
+
+            int leftmost = 0, rightmost = 0;
+            for (int col = 0; col < w; ++col)
+            {
+                if (!allWhiteColumn(col))
+                    break;
+                leftmost = col;
+            }
+
+            for (int col = w - 1; col >= 0; --col)
+            {
+                if (!allWhiteColumn(col))
+                    break;
+                rightmost = col;
+            }
+
+            if (rightmost == 0) rightmost = w; // As reached left
+            if (bottommost == 0) bottommost = h; // As reached top.
+
+            int croppedWidth = rightmost - leftmost;
+            int croppedHeight = bottommost - topmost;
+
+            if (croppedWidth == 0) // No border on left or right
+            {
+                leftmost = 0;
+                croppedWidth = w;
+            }
+
+            if (croppedHeight == 0) // No border on top or bottom
+            {
+                topmost = 0;
+                croppedHeight = h;
+            }
+
+            try
+            {
+                var target = new Bitmap(croppedWidth, croppedHeight);
+                using (Graphics g = Graphics.FromImage(target))
+                {
+                    g.DrawImage(bmp,
+                        new RectangleF(0, 0, croppedWidth, croppedHeight),
+                        new RectangleF(leftmost, topmost, croppedWidth, croppedHeight),
+                        GraphicsUnit.Pixel);
+                }
+                return ((Image)target);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    string.Format("Values are topmost={0} btm={1} left={2} right={3} croppedWidth={4} croppedHeight={5}", topmost, bottommost, leftmost, rightmost, croppedWidth, croppedHeight),
+                    ex);
+            }
+            
+        }
+    
+        private static byte[] ImageToByteArray(Image imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            return ms.ToArray();
         }
     }
 }
