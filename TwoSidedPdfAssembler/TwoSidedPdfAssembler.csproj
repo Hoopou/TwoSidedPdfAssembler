@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Cloud.Vision.V1" Version="2.4.0" />
     <PackageReference Include="PdfSharp" Version="1.51.5185-beta" />
     <PackageReference Include="PdfSharpCore" Version="1.2.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="receipt-ocr-342302-92d8bc72efd8.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

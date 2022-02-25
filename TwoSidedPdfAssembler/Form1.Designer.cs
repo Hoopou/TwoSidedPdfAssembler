@@ -30,6 +30,7 @@
         {
             this.panel_assemblePDF = new System.Windows.Forms.Panel();
             this.panel_MainPage = new System.Windows.Forms.Panel();
+            this.button_CropAndAutoCut = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown_tolerance = new System.Windows.Forms.NumericUpDown();
             this.button_crop = new System.Windows.Forms.Button();
@@ -44,7 +45,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button_CropAndAutoCut = new System.Windows.Forms.Button();
+            this.buttonOCR = new System.Windows.Forms.Button();
             this.panel_assemblePDF.SuspendLayout();
             this.panel_MainPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_tolerance)).BeginInit();
@@ -69,6 +70,7 @@
             this.panel_MainPage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_MainPage.Controls.Add(this.buttonOCR);
             this.panel_MainPage.Controls.Add(this.button_CropAndAutoCut);
             this.panel_MainPage.Controls.Add(this.label1);
             this.panel_MainPage.Controls.Add(this.numericUpDown_tolerance);
@@ -85,6 +87,16 @@
             this.panel_MainPage.Name = "panel_MainPage";
             this.panel_MainPage.Size = new System.Drawing.Size(947, 497);
             this.panel_MainPage.TabIndex = 3;
+            // 
+            // button_CropAndAutoCut
+            // 
+            this.button_CropAndAutoCut.Location = new System.Drawing.Point(388, 42);
+            this.button_CropAndAutoCut.Name = "button_CropAndAutoCut";
+            this.button_CropAndAutoCut.Size = new System.Drawing.Size(110, 26);
+            this.button_CropAndAutoCut.TabIndex = 11;
+            this.button_CropAndAutoCut.Text = "Crop +";
+            this.button_CropAndAutoCut.UseVisualStyleBackColor = true;
+            this.button_CropAndAutoCut.Click += new System.EventHandler(this.button_CropAndAutoCut_Click);
             // 
             // label1
             // 
@@ -239,15 +251,15 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button_CropAndAutoCut
+            // buttonOCR
             // 
-            this.button_CropAndAutoCut.Location = new System.Drawing.Point(388, 42);
-            this.button_CropAndAutoCut.Name = "button_CropAndAutoCut";
-            this.button_CropAndAutoCut.Size = new System.Drawing.Size(110, 26);
-            this.button_CropAndAutoCut.TabIndex = 11;
-            this.button_CropAndAutoCut.Text = "Crop +";
-            this.button_CropAndAutoCut.UseVisualStyleBackColor = true;
-            this.button_CropAndAutoCut.Click += new System.EventHandler(this.button_CropAndAutoCut_Click);
+            this.buttonOCR.Location = new System.Drawing.Point(577, 14);
+            this.buttonOCR.Name = "buttonOCR";
+            this.buttonOCR.Size = new System.Drawing.Size(116, 26);
+            this.buttonOCR.TabIndex = 12;
+            this.buttonOCR.Text = "OCR";
+            this.buttonOCR.UseVisualStyleBackColor = true;
+            this.buttonOCR.Click += new System.EventHandler(this.buttonOCR_Click);
             // 
             // Form1
             // 
@@ -286,6 +298,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDown_tolerance;
         private System.Windows.Forms.Button button_CropAndAutoCut;
+        private System.Windows.Forms.Button buttonOCR;
     }
 }
 

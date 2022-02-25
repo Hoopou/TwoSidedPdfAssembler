@@ -23,6 +23,8 @@ using SixLabors.ImageSharp.PixelFormats;
 using System.Xml.Linq;
 using static System.Collections.Specialized.BitVector32;
 using PdfSharpCore.Drawing;
+using Google.Cloud.Vision.V1;
+using Google.Protobuf.Collections;
 
 namespace TwoSidedPdfAssembler
 {
@@ -437,6 +439,73 @@ namespace TwoSidedPdfAssembler
 
             panel_preview.BackgroundImage = null;
             panel_preview.BackgroundImage = selectedPanels.Count > 0 ? selectedPanels.Last().BackgroundImage : null;
+        }
+
+        private void buttonOCR_Click(object sender, EventArgs e)
+        {
+            //https://cloud.google.com/dotnet/docs/reference/Google.Cloud.Vision.V1/latest
+
+
+            if (selectedPanels.Count <= 0) return;
+
+            Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromBytes(ImageHelper.ImageToByteArray(selectedPanels[0].BackgroundImage));
+            ImageAnnotatorClient client = ImageAnnotatorClient.Create();
+            var result = client.DetectDocumentText(image);
+
+
+            Bitmap bitmap = new Bitmap(selectedPanels[0].BackgroundImage);
+
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                foreach (var page in result.Pages)
+                {
+                    foreach (var block in page.Blocks)
+                    {
+
+                        var pen = new Pen(Color.Red);
+                        pen.Width = 4;
+                        DrawVertices(pen, g, block.BoundingBox.Vertices);
+
+
+                        foreach (var par in block.Paragraphs)
+                        {
+                            pen.Color = Color.Green;
+                            pen.Width = 3;
+                            DrawVertices(pen, g, par.BoundingBox.Vertices);
+
+                            foreach (var word in par.Words)
+                            {
+                                pen.Color = Color.Blue;
+                                pen.Width = 2;
+                                DrawVertices(pen, g, word.BoundingBox.Vertices);
+
+                                foreach (var symbol in word.Symbols)
+                                {
+                                    pen.Color = Color.Chocolate;
+                                    pen.Width = 1;
+                                    DrawVertices(pen,g, symbol.BoundingBox.Vertices);
+                                }
+
+                                Console.WriteLine(word.Symbols[0].Text);
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+            panel_preview.BackgroundImage = bitmap;
+
+        }
+
+
+        private void DrawVertices(Pen pen ,Graphics g, RepeatedField<Vertex> vertices)
+        {
+            g.DrawLine(pen, new Point(vertices[0].X, vertices[0].Y),new Point(vertices[1].X, vertices[1].Y));
+            g.DrawLine(pen, new Point(vertices[1].X, vertices[1].Y),new Point(vertices[2].X, vertices[2].Y));
+            g.DrawLine(pen, new Point(vertices[2].X, vertices[2].Y),new Point(vertices[3].X, vertices[3].Y));
+            g.DrawLine(pen, new Point(vertices[3].X, vertices[3].Y),new Point(vertices[0].X, vertices[0].Y));
         }
     }
 }

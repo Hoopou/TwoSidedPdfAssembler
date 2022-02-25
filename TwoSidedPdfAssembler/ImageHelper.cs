@@ -375,12 +375,14 @@ namespace TwoSidedPdfAssembler
             }
             
         }
-    
-        private static byte[] ImageToByteArray(Image imageIn)
+
+        public static byte[] ImageToByteArray(Image imageIn)
         {
-            MemoryStream ms = new MemoryStream();
-            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            return ms.ToArray();
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, imageIn.RawFormat);
+                return ms.ToArray();
+            }
         }
     }
 }

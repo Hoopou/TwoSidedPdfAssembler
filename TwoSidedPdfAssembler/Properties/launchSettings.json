@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TwoSidedPdfAssembler": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "receipt-ocr-342302-92d8bc72efd8.json"
+      }
+    }
+  }
+}
