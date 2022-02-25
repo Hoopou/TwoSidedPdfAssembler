@@ -413,5 +413,30 @@ namespace TwoSidedPdfAssembler
             panel_preview.BackgroundImage = selectedPanels.Count > 0 ? selectedPanels.Last().BackgroundImage : null;
 
         }
+
+        private void button_CropAndAutoCut_Click(object sender, EventArgs e)
+        {
+            foreach (var panel in selectedPanels)
+            {
+
+                var targetImg = ImageHelper.CropImage(panel.BackgroundImage, Color.White, (int)numericUpDown_tolerance.Value);
+                var resultImgList = new ImagePathFinder().AutoCut(targetImg, Color.White, this.panel_preview, (int)numericUpDown_tolerance.Value);
+                //flowPanelLayout_pages.Controls.Remove(panel);
+                foreach (var img in resultImgList)
+                {
+                    addPagePreview(img);
+                }
+
+                panel.BackgroundImage = null;
+                panel.BackgroundImage = targetImg;
+                panel.Refresh();
+                panel_preview.BackgroundImage = null;
+                panel_preview.BackgroundImage = targetImg;
+                panel_preview.Refresh();
+            }
+
+            panel_preview.BackgroundImage = null;
+            panel_preview.BackgroundImage = selectedPanels.Count > 0 ? selectedPanels.Last().BackgroundImage : null;
+        }
     }
 }

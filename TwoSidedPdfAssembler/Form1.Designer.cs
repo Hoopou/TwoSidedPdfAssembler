@@ -30,6 +30,8 @@
         {
             this.panel_assemblePDF = new System.Windows.Forms.Panel();
             this.panel_MainPage = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDown_tolerance = new System.Windows.Forms.NumericUpDown();
             this.button_crop = new System.Windows.Forms.Button();
             this.button_export_jpg = new System.Windows.Forms.Button();
             this.button_export_png = new System.Windows.Forms.Button();
@@ -42,8 +44,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.numericUpDown_tolerance = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.button_CropAndAutoCut = new System.Windows.Forms.Button();
             this.panel_assemblePDF.SuspendLayout();
             this.panel_MainPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_tolerance)).BeginInit();
@@ -68,6 +69,7 @@
             this.panel_MainPage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_MainPage.Controls.Add(this.button_CropAndAutoCut);
             this.panel_MainPage.Controls.Add(this.label1);
             this.panel_MainPage.Controls.Add(this.numericUpDown_tolerance);
             this.panel_MainPage.Controls.Add(this.button_crop);
@@ -84,11 +86,37 @@
             this.panel_MainPage.Size = new System.Drawing.Size(947, 497);
             this.panel_MainPage.TabIndex = 3;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(504, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 15);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "tolerance";
+            // 
+            // numericUpDown_tolerance
+            // 
+            this.numericUpDown_tolerance.Location = new System.Drawing.Point(504, 49);
+            this.numericUpDown_tolerance.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown_tolerance.Name = "numericUpDown_tolerance";
+            this.numericUpDown_tolerance.Size = new System.Drawing.Size(63, 23);
+            this.numericUpDown_tolerance.TabIndex = 9;
+            this.numericUpDown_tolerance.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
             // button_crop
             // 
             this.button_crop.Location = new System.Drawing.Point(388, 13);
             this.button_crop.Name = "button_crop";
-            this.button_crop.Size = new System.Drawing.Size(110, 59);
+            this.button_crop.Size = new System.Drawing.Size(110, 23);
             this.button_crop.TabIndex = 8;
             this.button_crop.Text = "Crop";
             this.button_crop.UseVisualStyleBackColor = true;
@@ -211,31 +239,15 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // numericUpDown_tolerance
+            // button_CropAndAutoCut
             // 
-            this.numericUpDown_tolerance.Location = new System.Drawing.Point(504, 49);
-            this.numericUpDown_tolerance.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown_tolerance.Name = "numericUpDown_tolerance";
-            this.numericUpDown_tolerance.Size = new System.Drawing.Size(63, 23);
-            this.numericUpDown_tolerance.TabIndex = 9;
-            this.numericUpDown_tolerance.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(504, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 15);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "tolerance";
+            this.button_CropAndAutoCut.Location = new System.Drawing.Point(388, 42);
+            this.button_CropAndAutoCut.Name = "button_CropAndAutoCut";
+            this.button_CropAndAutoCut.Size = new System.Drawing.Size(110, 26);
+            this.button_CropAndAutoCut.TabIndex = 11;
+            this.button_CropAndAutoCut.Text = "Crop +";
+            this.button_CropAndAutoCut.UseVisualStyleBackColor = true;
+            this.button_CropAndAutoCut.Click += new System.EventHandler(this.button_CropAndAutoCut_Click);
             // 
             // Form1
             // 
@@ -273,6 +285,7 @@
         private System.Windows.Forms.Button button_crop;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDown_tolerance;
+        private System.Windows.Forms.Button button_CropAndAutoCut;
     }
 }
 
