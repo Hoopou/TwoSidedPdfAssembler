@@ -1,27 +1,15 @@
-﻿using PdfSharpCore.Pdf;
-using PdfSharpCore.Pdf.IO;
+﻿using PdfSharpCore.Pdf.IO;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Linq;
 using Color = System.Drawing.Color;
 using System.Drawing.Imaging;
-using PdfSharp.Pdf;
 using PdfDocument = PdfSharpCore.Pdf.PdfDocument;
-using System.Reflection.Metadata;
-using PdfSharpCore.Utils;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
-using SixLabors.ImageSharp.PixelFormats;
-using System.Xml.Linq;
-using static System.Collections.Specialized.BitVector32;
 using PdfSharpCore.Drawing;
 using Google.Cloud.Vision.V1;
 using Google.Protobuf.Collections;
@@ -444,21 +432,26 @@ namespace TwoSidedPdfAssembler
         private void buttonOCR_Click(object sender, EventArgs e)
         {
             //https://cloud.google.com/dotnet/docs/reference/Google.Cloud.Vision.V1/latest
-
+            //https://github.com/nzregs/receipt-api
 
             if (selectedPanels.Count <= 0) return;
 
             Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromBytes(ImageHelper.ImageToByteArray(selectedPanels[0].BackgroundImage));
             ImageAnnotatorClient client = ImageAnnotatorClient.Create();
+
             var result = client.DetectDocumentText(image);
 
+            var textLineList = result.Text.Split("\n").ToList();
 
+            //ConsoleBox.AppendText(result.Text + "\n\n\n");
+           
             Bitmap bitmap = new Bitmap(selectedPanels[0].BackgroundImage);
 
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 foreach (var page in result.Pages)
                 {
+
                     foreach (var block in page.Blocks)
                     {
 
@@ -472,7 +465,7 @@ namespace TwoSidedPdfAssembler
                             pen.Color = Color.Green;
                             pen.Width = 3;
                             DrawVertices(pen, g, par.BoundingBox.Vertices);
-
+                            
                             foreach (var word in par.Words)
                             {
                                 pen.Color = Color.Blue;
@@ -484,7 +477,10 @@ namespace TwoSidedPdfAssembler
                                     pen.Color = Color.Chocolate;
                                     pen.Width = 1;
                                     DrawVertices(pen,g, symbol.BoundingBox.Vertices);
+
+                                    //ConsoleBox.AppendText(symbol.Text);
                                 }
+                                //ConsoleBox.AppendText("\n");
 
                                 Console.WriteLine(word.Symbols[0].Text);
                             }
@@ -495,8 +491,99 @@ namespace TwoSidedPdfAssembler
             }
 
 
+
+
+            //ConsoleBox.AppendText("\n\n\n");
+
+
+            var totalLines = textLineList.Where(v => v.ToLower().Contains("total") && (v.ToLower().Contains("sous") || v.ToLower().Contains("sub"))).ToList();
+            string subtotal = parseLine(totalLines, textLineList);
+            
+
+            var lineTaxStart = textLineList.IndexOf(totalLines.First()) + 1;
+
+            totalLines = textLineList.Where(v => v.ToLower().Contains("total") && !(v.ToLower().Contains("sous") || v.ToLower().Contains("sub"))).ToList();
+            string total = parseLine(totalLines, textLineList);
+            
+
+            var lineTaxEnd = textLineList.IndexOf(totalLines.First());
+
+            
+
+
+            
+
+
+
+
+            var title = textLineList.FirstOrDefault();
+
+            if (title.Contains("*"))
+            {
+                title = textLineList.Skip(1).FirstOrDefault();
+            }
+
+
+            ConsoleBox.AppendText("Marchand: " + title + "\n");
+            ConsoleBox.AppendText(subtotal + "\n");
+            ConsoleBox.AppendText("TAXES: \n");
+            for (var taxIndex = lineTaxStart; taxIndex < lineTaxEnd; taxIndex++)
+                ConsoleBox.AppendText("\t"+textLineList[taxIndex] + "\n");
+            ConsoleBox.AppendText(total + "\n");
+
+
+            ConsoleBox.AppendText("\n\n\n\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             panel_preview.BackgroundImage = bitmap;
 
+        }
+
+
+        private string parseLine(List<string> totalLines, List<string> textLineList)
+        {
+            string finalTotalLine = "";
+
+            if (totalLines.Any())
+            {
+                for (var index = 0; index < totalLines.Count(); index++)
+                {
+                    if (!totalLines.Skip(index).First().Any(char.IsDigit))
+                    {
+                        var expectedDidgets = textLineList[textLineList.IndexOf(totalLines.Skip(index).First()) + 1];
+
+                        if (expectedDidgets.Any(char.IsDigit))
+                        {
+                            finalTotalLine = totalLines.Skip(index).First() + " " + expectedDidgets;
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        finalTotalLine = totalLines.Skip(index).First();
+                        break;
+                    }
+                }
+            }
+
+            return finalTotalLine;
         }
 
 

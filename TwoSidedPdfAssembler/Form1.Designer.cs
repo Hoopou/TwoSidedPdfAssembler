@@ -30,6 +30,12 @@
         {
             this.panel_assemblePDF = new System.Windows.Forms.Panel();
             this.panel_MainPage = new System.Windows.Forms.Panel();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPreview = new System.Windows.Forms.TabPage();
+            this.panel_preview = new System.Windows.Forms.Panel();
+            this.tabConsole = new System.Windows.Forms.TabPage();
+            this.ConsoleBox = new System.Windows.Forms.RichTextBox();
+            this.buttonOCR = new System.Windows.Forms.Button();
             this.button_CropAndAutoCut = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown_tolerance = new System.Windows.Forms.NumericUpDown();
@@ -40,14 +46,15 @@
             this.button_export_pdf = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button_rotate_right = new System.Windows.Forms.Button();
-            this.panel_preview = new System.Windows.Forms.Panel();
             this.flowPanelLayout_pages = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.buttonOCR = new System.Windows.Forms.Button();
             this.panel_assemblePDF.SuspendLayout();
             this.panel_MainPage.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPreview.SuspendLayout();
+            this.tabConsole.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_tolerance)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,6 +77,7 @@
             this.panel_MainPage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_MainPage.Controls.Add(this.tabControl1);
             this.panel_MainPage.Controls.Add(this.buttonOCR);
             this.panel_MainPage.Controls.Add(this.button_CropAndAutoCut);
             this.panel_MainPage.Controls.Add(this.label1);
@@ -81,12 +89,78 @@
             this.panel_MainPage.Controls.Add(this.button_export_pdf);
             this.panel_MainPage.Controls.Add(this.button4);
             this.panel_MainPage.Controls.Add(this.button_rotate_right);
-            this.panel_MainPage.Controls.Add(this.panel_preview);
             this.panel_MainPage.Controls.Add(this.flowPanelLayout_pages);
             this.panel_MainPage.Location = new System.Drawing.Point(0, 0);
             this.panel_MainPage.Name = "panel_MainPage";
             this.panel_MainPage.Size = new System.Drawing.Size(947, 497);
             this.panel_MainPage.TabIndex = 3;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPreview);
+            this.tabControl1.Controls.Add(this.tabConsole);
+            this.tabControl1.Location = new System.Drawing.Point(145, 74);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(799, 412);
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tabPreview
+            // 
+            this.tabPreview.Controls.Add(this.panel_preview);
+            this.tabPreview.Location = new System.Drawing.Point(4, 24);
+            this.tabPreview.Name = "tabPreview";
+            this.tabPreview.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPreview.Size = new System.Drawing.Size(791, 384);
+            this.tabPreview.TabIndex = 0;
+            this.tabPreview.Text = "Preview";
+            this.tabPreview.UseVisualStyleBackColor = true;
+            // 
+            // panel_preview
+            // 
+            this.panel_preview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_preview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_preview.Location = new System.Drawing.Point(3, 3);
+            this.panel_preview.Name = "panel_preview";
+            this.panel_preview.Size = new System.Drawing.Size(782, 375);
+            this.panel_preview.TabIndex = 1;
+            // 
+            // tabConsole
+            // 
+            this.tabConsole.Controls.Add(this.ConsoleBox);
+            this.tabConsole.Location = new System.Drawing.Point(4, 24);
+            this.tabConsole.Name = "tabConsole";
+            this.tabConsole.Padding = new System.Windows.Forms.Padding(3);
+            this.tabConsole.Size = new System.Drawing.Size(791, 384);
+            this.tabConsole.TabIndex = 1;
+            this.tabConsole.Text = "Console";
+            this.tabConsole.UseVisualStyleBackColor = true;
+            // 
+            // ConsoleBox
+            // 
+            this.ConsoleBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConsoleBox.Location = new System.Drawing.Point(0, 0);
+            this.ConsoleBox.Name = "ConsoleBox";
+            this.ConsoleBox.Size = new System.Drawing.Size(788, 388);
+            this.ConsoleBox.TabIndex = 0;
+            this.ConsoleBox.Text = "";
+            // 
+            // buttonOCR
+            // 
+            this.buttonOCR.Location = new System.Drawing.Point(577, 14);
+            this.buttonOCR.Name = "buttonOCR";
+            this.buttonOCR.Size = new System.Drawing.Size(116, 26);
+            this.buttonOCR.TabIndex = 12;
+            this.buttonOCR.Text = "OCR";
+            this.buttonOCR.UseVisualStyleBackColor = true;
+            this.buttonOCR.Click += new System.EventHandler(this.buttonOCR_Click);
             // 
             // button_CropAndAutoCut
             // 
@@ -198,17 +272,6 @@
             this.button_rotate_right.UseVisualStyleBackColor = true;
             this.button_rotate_right.Click += new System.EventHandler(this.button_rotate_right_Click);
             // 
-            // panel_preview
-            // 
-            this.panel_preview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_preview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_preview.Location = new System.Drawing.Point(158, 78);
-            this.panel_preview.Name = "panel_preview";
-            this.panel_preview.Size = new System.Drawing.Size(740, 385);
-            this.panel_preview.TabIndex = 1;
-            // 
             // flowPanelLayout_pages
             // 
             this.flowPanelLayout_pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -251,16 +314,6 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // buttonOCR
-            // 
-            this.buttonOCR.Location = new System.Drawing.Point(577, 14);
-            this.buttonOCR.Name = "buttonOCR";
-            this.buttonOCR.Size = new System.Drawing.Size(116, 26);
-            this.buttonOCR.TabIndex = 12;
-            this.buttonOCR.Text = "OCR";
-            this.buttonOCR.UseVisualStyleBackColor = true;
-            this.buttonOCR.Click += new System.EventHandler(this.buttonOCR_Click);
-            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -275,6 +328,9 @@
             this.panel_assemblePDF.ResumeLayout(false);
             this.panel_MainPage.ResumeLayout(false);
             this.panel_MainPage.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPreview.ResumeLayout(false);
+            this.tabConsole.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_tolerance)).EndInit();
             this.ResumeLayout(false);
 
@@ -299,6 +355,10 @@
         private System.Windows.Forms.NumericUpDown numericUpDown_tolerance;
         private System.Windows.Forms.Button button_CropAndAutoCut;
         private System.Windows.Forms.Button buttonOCR;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPreview;
+        private System.Windows.Forms.TabPage tabConsole;
+        private System.Windows.Forms.RichTextBox ConsoleBox;
     }
 }
 
